@@ -3,10 +3,9 @@ const app = express();
 
 const port = 4001;
 
-app.get("/",(req,res) => { 
-    res.status(200).json({message:"Pinging Success"});
-});
+app.use(express.json());
+app.use('/api/urls',require("./router/urlRoutes"));
 
 app.listen(port,()=>{
     console.log("Server started at port ",port);
-});
+}); 
