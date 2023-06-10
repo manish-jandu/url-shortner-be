@@ -1,5 +1,6 @@
- const asyncExpress = require('express-async-handler');
- const UrlSchema = require("../models/urlModel");
+const asyncExpress = require('express-async-handler');
+const UrlSchema = require("../models/urlModel");
+const mongoose = require('mongoose');
 const { validateUrl } = require('../utils/utils');
 const shortid = require('shortid');
 
@@ -59,7 +60,22 @@ const getAUrl = asyncExpress (async (req,res) => {
         res.status(400);
         throw new Error("id is Mandatory");
     }
-    res.status(200).json({message:"getting a url"});
+
+    if(!mongoose.Types.ObjectId.isValid(id.toString())){
+        res.status(400);
+        throw new Error("error in id");
+    }
+
+    const urlId = new mongoose.Types.ObjectId(id.toString());
+    const urlData = await UrlSchema.findOne({ _id:urlId });
+
+    if(!urlData){
+        res.status(400);
+        throw new Error("No url found for this id");
+    }
+
+
+    res.status(200).json(urlData);
 });
 
 //@desc delete a url
