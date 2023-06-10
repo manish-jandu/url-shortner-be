@@ -63,7 +63,7 @@ const getAUrl = asyncExpress (async (req,res) => {
 
     if(!mongoose.Types.ObjectId.isValid(id.toString())){
         res.status(400);
-        throw new Error("error in id");
+        throw new Error("Not a valid id");
     }
 
     const urlId = new mongoose.Types.ObjectId(id.toString());
@@ -73,7 +73,6 @@ const getAUrl = asyncExpress (async (req,res) => {
         res.status(400);
         throw new Error("No url found for this id");
     }
-
 
     res.status(200).json(urlData);
 });
@@ -87,7 +86,23 @@ const deleteAUrl = asyncExpress (async (req,res) => {
         res.status(400);
         throw new Error("id is Mandatory");
     }
-    res.status(200).json({message:"Deleting a url"});
+
+    if(!mongoose.Types.ObjectId.isValid(id.toString())){
+        res.status(400);
+        throw new Error("Not a valid id");
+    }
+
+    const urlId = new mongoose.Types.ObjectId(id.toString());
+    const urlData = await UrlSchema.findOne({_id:urlId})
+
+    if(!urlData){
+        res.status(400);
+        throw new Error("Couldn't found any url");
+    }
+
+   
+    await UrlSchema.deleteOne({ _id:urlId });
+    res.status(200).json(urlData);
 });
 
 
