@@ -8,7 +8,8 @@ const shortid = require('shortid');
 //@route GET /api/urls
 //@access public
 const getAllUrls = asyncExpress (async (req,res) => {
-    res.status(200).json({message:"Getting All urls"});
+    let urls = await UrlSchema.find();
+    res.status(200).json(urls);
 });
 
 //@desc Add new Url
@@ -29,10 +30,11 @@ const createUrl =asyncExpress (async (req,res) => {
         throw new Error("Invalid Url");
     }
 
-    let url = await UrlSchema.findOne({orignalUrl});
+    let url = await UrlSchema.findOne({orig_url:orignalUrl});
 
     if(url){//already exist
         res.json(url);
+        return;
     }
 
     const urlId = shortid.generate();
