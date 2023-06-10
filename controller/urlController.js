@@ -1,4 +1,7 @@
  const asyncExpress = require('express-async-handler');
+ const UrlSchema = require("../models/urlModel");
+const { validateUrl } = require('../utils/utils');
+const shortid = require('shortid');
 
 
 //@desc Get all Urls
@@ -12,12 +15,37 @@ const getAllUrls = asyncExpress (async (req,res) => {
 //@route POST /api/urls
 //@access public
 const createUrl =asyncExpress (async (req,res) => {
-    const url = req.body.url;
-    if(!url){
+
+    const orignalUrl = req.body.url;
+    console.log("creating url");
+    
+    if(!orignalUrl){
         res.status(400);
         throw new Error("Url is Mandatory");
     }
-    res.status(200).json({message:"posting your url"});
+
+    if(!validateUrl(orignalUrl)){
+        res.status(400);
+        throw new Error("Invalid Url");
+    }
+
+    let url = await UrlSchema.findOne({orignalUrl});
+
+    if(url){//already exist
+        res.json(url);
+    }
+
+    const urlId = shortid.generate();
+    const currentUrl = `http://localhost:${process.env.PORT}`
+    const shortUrl =    `${currentUrl}/${urlId}`;
+    url = await UrlSchema.create({
+        url_id: urlId,
+        orig_url: orignalUrl,
+        short_url: shortUrl
+    });
+
+
+    res.status(200).json(url);
 });
 
 //@desc get a url

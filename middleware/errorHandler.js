@@ -21,7 +21,7 @@ const errorHanlder = (err,req,res,next) => {
             res.json({title:"Server Error",message:err.message,stackTrace:err.stack});
             break;
         default:
-            res.json({message:"Something went wrong!"})
+            res.json({title:"Something went wrong!",message:err.message,stackTrace:err.stack});
             break;
     }
 
