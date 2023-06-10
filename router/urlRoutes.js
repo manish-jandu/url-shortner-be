@@ -1,10 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const {getRoot} = require("../controller/urlController");
+const {
+    getAllUrls,
+    createUrl,
+    getAUrl,
+    deleteAUrl
+} = require("../controller/urlController");
 
 
-router.route("/").get(getRoot);
+router.route("/").get(getAllUrls).put(createUrl);
+
+router.route("/:id").get(getAUrl).delete(deleteAUrl);
 
 module.exports = router;
 
