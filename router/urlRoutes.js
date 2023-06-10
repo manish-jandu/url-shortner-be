@@ -9,7 +9,7 @@ const {
 } = require("../controller/urlController");
 
 
-router.route("/").get(getAllUrls).put(createUrl);
+router.route("/").get(getAllUrls).post(createUrl);
 
 router.route("/:id").get(getAUrl).delete(deleteAUrl);
 
