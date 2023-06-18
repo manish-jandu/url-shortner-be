@@ -7,4 +7,5 @@ Funcationalities
 2. Rediriction ✅ 
 3. all urls ✅ 
 4. get a url by id ✅ 
-5. delete the url [after 24 hours]
+5. delete the url [after 24 hours]✅ 
+6. Signup and Login user

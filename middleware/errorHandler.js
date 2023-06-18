@@ -21,6 +21,7 @@ const errorHanlder = (err,req,res,next) => {
             res.json({title:"Server Error",message:err.message,stackTrace:err.stack});
             break;
         default:
+            //Todo: check default case.
             res.json({title:"Something went wrong!",message:err.message,stackTrace:err.stack});
             break;
     }
