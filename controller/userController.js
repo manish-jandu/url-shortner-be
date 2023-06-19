@@ -18,7 +18,6 @@ const register = asyncExpress(async (req,res)=>{
         throw new Error("Please Enter valid Credentials");
     }
 
-    console.log(`email is ${email}, username is ${userName} and pass is ${password}`)
 
     const userAvailable = await User.findOne({email});
     if(userAvailable){
@@ -36,21 +35,49 @@ const register = asyncExpress(async (req,res)=>{
     });
 
 
-    res.status(200).json({email:user.email,user_name:user.username});
+    res.status(200).json({email:user.email,username:user.username});
 });
 
 //@desc Login User
 //@route GET /api/user/login
 //@access public
 const login = asyncExpress(async (req,res)=>{
-    res.status(200).send({message:"hello there"});
+    const password = req.body.password;
+    const email = req.body.email;
+    
+    if( !password || !email || !isEmail(email) || password.length < 5){
+        res.status(400);
+        throw new Error("Please Enter valid Credentials");
+    }
+
+    const user = await User.findOne({email:email});
+    const isPassCorrect = await bcyrpt.compare(password,user.password);
+    
+    if(!user || !isPassCorrect){
+        res.status(401);
+        throw new Error("email or password is not valid.");
+    }
+
+    const accessToken = await jwt.sign(
+        payload = {
+            User:{
+                username:user.username,
+                email:user.email,
+                _id:user._id
+            },
+        },
+        secretOrPrivateKey = process.env.ACCESS_TOKEN_SECRET,
+        {expiresIn: "20m"}
+    )
+
+    res.status(200).send(accessToken);
 });
 
 //@desc Get Current User
 //@route GET /api/user/current
-//@access private
+//@access public
 const currentUser = asyncExpress(async (req,res)=>{
-
+   
 });
 
 
