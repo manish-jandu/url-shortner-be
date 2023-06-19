@@ -77,7 +77,7 @@ const login = asyncExpress(async (req,res)=>{
 //@route GET /api/user/current
 //@access public
 const currentUser = asyncExpress(async (req,res)=>{
-   
+   res.status(200).send(req.user);
 });
 
 
