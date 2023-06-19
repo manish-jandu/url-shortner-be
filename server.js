@@ -11,6 +11,7 @@ connectDb();
 
 app.use(express.json());
 app.use('/api/urls',require("./router/urlRoutes"));
+app.use('/api/user',require("./router/userRoutes"));
 app.use('/',require("./router/redirectRoute"));
 app.use(errorHanlder);
 
