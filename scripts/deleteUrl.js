@@ -12,6 +12,7 @@ let executingtask = false
 const task = new AsyncTask(
     'simple task', 
     async() => { 
+        return;
         if(executingtask){
             return
         }
